@@ -11,7 +11,7 @@ const TopArea = () => {
     });
 
     const fetchKrwCoinCount = async () => {
-        const upbitUrl = `${process.env.REACT_APP_API_URL}/api/krwCoinCount`;
+        const upbitUrl = `${process.env.REACT_APP_API_URL}api/krwCoinCount`;
 
         try {
             const response = await fetch(upbitUrl);
@@ -33,14 +33,14 @@ const TopArea = () => {
     };
 
     const fetchUsdToKrwExchangeRate = async () => {
-        const exchangeRateUrl = `${process.env.REACT_APP_API_URL}/api/usdToKrwExchangeRate`;
+        const exchangeRateUrl = `${process.env.REACT_APP_API_URL}api/usdToKrwExchangeRate`;
         
         try {
             const response = await fetch(exchangeRateUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const data = await response.json();
 
             setMarketData(prevState => ({
