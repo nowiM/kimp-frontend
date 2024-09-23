@@ -21,7 +21,7 @@ function App() {
 
   // Socket.io를 통해 데이터를 받아오는 로직
   useEffect(() => {
-    const socket = io(`process.env.REACT_APP_API_URL`);
+    const socket = io(process.env.REACT_APP_API_URL);
 
     socket.on('connect', () => {
       console.log("서버와 Socket.io 연결 성공");
