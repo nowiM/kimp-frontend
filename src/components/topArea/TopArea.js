@@ -15,6 +15,10 @@ const TopArea = () => {
 
         try {
             const response = await fetch(upbitUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
             const data = await response.json();
     
             const krwMarket = data.filter(coin => coin.market.startsWith('KRW'));
@@ -33,6 +37,10 @@ const TopArea = () => {
         
         try {
             const response = await fetch(exchangeRateUrl);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const data = await response.json();
 
             setMarketData(prevState => ({
