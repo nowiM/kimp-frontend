@@ -1,0 +1,19 @@
+.my-message-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 5px 0;
+  font-size: 13px;
+}
+
+.user-name {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+.my-message {
+  border-radius: 8px;
+  max-width: 200px;
+  padding: 3px;
+  word-wrap: break-word; /* 긴 단어를 자동으로 줄바꿈 */
+}

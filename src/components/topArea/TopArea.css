@@ -1,0 +1,77 @@
+.topArea .container {
+    max-width: 1200px;
+    width: 100%;
+    font-size: 13px;
+}
+
+.topArea .container .item {
+    margin-right: 5px;
+}
+
+.topArea .container .item .title {
+    color: #64748b;
+}
+
+.topArea .container .item .value,
+.topArea .container .item .totalMarketRate {
+    font-weight: 600;
+}
+
+.topArea .container .item .value:hover {
+    color: #48CB00;
+}
+
+.topArea .container .item .totalMarketRate.rise,
+.topArea .container .item .totalVolueRate.rise {
+    color: red;
+}
+
+.topArea .container .item .totalMarketRate.fall,
+.topArea .container .item .totalVolueRate.fall {
+    color: blue;
+}
+
+.topArea .container .item .totalMarketRate .triangleIcon,
+.topArea .container .item .totalVolueRate .triangleIcon {
+    width: 15px; 
+    height: 10px; 
+    margin-left: 5px;
+}
+
+.topArea .container .item .totalMarketRate .triangleIcon.rise,
+.topArea .container .item .totalVolueRate .triangleIcon.rise {
+    /* color is red */
+    filter: invert(19%) sepia(95%) saturate(5332%) hue-rotate(356deg) brightness(107%) contrast(122%);
+}
+
+.topArea .container .item .totalMarketRate .triangleIcon.fall,
+.topArea .container .item .totalVolueRate .triangleIcon.fall {
+    /* color is blue */
+    filter: invert(9%) sepia(100%) saturate(6794%) hue-rotate(247deg) brightness(87%) contrast(145%);
+    transform: rotate(180deg); /* 아이콘을 180도 회전 */
+}
+
+.topArea .container .item .ethDominance {
+    margin-left: 5px;
+}
+
+@media (max-width: 1200px) {
+    .topArea .container {
+        max-width: 990px;
+    }
+
+    .mainContainer .mainContent .container {
+        max-width: 990px;
+    }
+
+    .mainContainer .mainContent .container .coinInfo {
+        flex: 6.5;
+    }
+}
+
+@media (max-width: 990px) {
+    .topArea .container {
+        max-width: 770px;
+        font-size: 12px;
+    }
+}

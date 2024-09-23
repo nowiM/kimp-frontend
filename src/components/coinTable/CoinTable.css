@@ -1,0 +1,137 @@
+/* kimpTable */
+.kimpTable {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.kimpTable .container {
+    padding: 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    margin: 15px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 추가된 box-shadow */
+}
+
+.kimpTable .container .table {
+    width: 100%;
+    table-layout: fixed;
+    font-size: 13px;
+    border-spacing: 0; /* 셀 간의 여백 제거 */
+}
+
+.kimpTable .container .table .tableHeader,
+.kimpTable .container .table .tableBody {
+    width: 100%;
+}
+
+.kimpTable .container .table .tableHeader tr th .triangle {
+    font-size: 10px;
+}
+
+/* tr 요소에 line-height 및 border-bottom 추가 */
+.kimpTable .container .table tr {
+    line-height: 30px;
+    display: flex;
+}
+
+.kimpTable .container .table tr:hover {
+    background-color: #f8f8f8;
+}
+
+/* th와 td에 대한 공통 스타일 */
+.kimpTable .container .table th,
+.kimpTable .container .table td {
+    border-bottom: 1px solid #ccc;
+    text-align: right;
+}
+
+/* 마지막 tr의 td border 제거 */
+.kimpTable .container .table tr:last-child td {
+    border: none;
+}
+
+/* 열 별 flex 비율 조정 */
+.kimpTable .container .table th.simbolInfoTh,
+.kimpTable .container .table td.simbolInfoTd {
+    min-width: 75px;
+}
+
+.kimpTable .container .table th.bybitTh,
+.kimpTable .container .table td.bybitTd {
+    flex: 1; /* 바이비트 열 */
+}
+
+.kimpTable .container .table th.upbitTh,
+.kimpTable .container .table td.upbitTd {
+    flex: 1.1; /* 업비트 열 */
+}
+
+.kimpTable .container .table th.signedChangeRateTh,
+.kimpTable .container .table td.signedChangeRateTd {
+    flex: 0.7; /* 등락(%) 열 */
+}
+
+.kimpTable .container .table th.lowest52WeekPriceTh,
+.kimpTable .container .table td.lowest52WeekPriceTd {
+    flex: 1.1; /* 52주 최저 열 */
+}
+
+.kimpTable .container .table th.accTradePriceTh,
+.kimpTable .container .table td.accTradePriceTd {
+    flex: 1; /* 거래량 열 */
+}
+
+.kimpTable .container .table th.premiumTh,
+.kimpTable .container .table td.premiumTd {
+    flex: 2; /* 김치프리미엄 열 */
+}
+
+.kimpTable .container .table .tableBody .simbolInfoTd {
+    display: flex;
+}
+
+.kimpTable .container .table .tableBody .simbolInfoTd .left {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 (div의 높이가 있을 때) */
+}
+
+.kimpTable .container .table .tableBody .simbolInfoTd .left .coinLogo {
+    width: 16px;
+    height: 16px;
+    margin-right: 10px;
+}
+
+.kimpTable .container .table .tableBody .simbolInfoTd .right {
+    margin-left: auto; /* 자동으로 왼쪽 마진을 채워서 오른쪽으로 밀기 */
+}
+
+.kimpTable .container .table .tableBody .rise {/*등락 --> 상승*/
+    color: red;
+}
+
+.kimpTable .container .table .tableBody .fall {/*등락 --> 하락*/
+    color: blue;
+}
+
+.kimpTable .container .table .tableBody .even {/*등락 --> 보합*/
+    color: black;
+}
+
+.kimpTable .container .table .tableBody .kimp {/*김프*/
+    color: blue;
+}
+
+.kimpTable .container .table .tableBody .reverse {/*역프*/
+    color: red;
+}
+
+.kimpTable .container .table .tableBody .even {/*역프*/
+    color: black;
+}
+
+@media (max-width: 990px) {
+    .kimpTable .container .table {
+        font-size: 10px;
+    }
+}
