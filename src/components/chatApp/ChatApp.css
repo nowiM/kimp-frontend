@@ -2,7 +2,7 @@
     position: sticky;
     flex: 3;
     top: 40px; /* 상단에 고정 */
-    height: 800px;
+    height: 80vh;
     border-radius: 12px;
     border: 1px solid #ccc;
     background-color: white;

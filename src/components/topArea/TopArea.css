@@ -75,3 +75,9 @@
         font-size: 12px;
     }
 }
+
+@media (max-width: 500px) {
+    .topArea .container {
+        font-size: 11px;
+    }
+}

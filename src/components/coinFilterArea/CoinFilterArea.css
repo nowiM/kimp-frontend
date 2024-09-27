@@ -164,6 +164,9 @@
 .mainContainer .mainContent .container .coinFilterArea .coins .bottom .signedChangeRate,
 .mainContainer .mainContent .container .coinFilterArea .coins .bottom .lowest52WeekPrice,
 .mainContainer .mainContent .container .coinFilterArea .coins .bottom .accTradePrice {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     text-align: center;
     padding: 10px;
     border: 1px solid #e0e0e0;
@@ -245,18 +248,102 @@
     .mainContainer .mainContent .container .coinFilterArea .coins .bottom .lowest52WeekPrice,
     .mainContainer .mainContent .container .coinFilterArea .coins .bottom .accTradePrice {
         min-width: 100px;
-        max-width: 140px;
+        max-width: 145px;
     }
 
     .logoAndSearch {
         flex-direction: column; /* 작은 화면에서는 세로로 배치 */
         align-items: flex-start;
-      }
+    }
     
-      .search {
+    .search {
         display: flex;
         justify-content: center;
         width: 100%; /* 검색 입력 필드가 전체 너비를 차지하도록 */
         margin-top: 10px; /* 로고와 검색 입력 필드 사이 간격 추가 */
-      }
+    }
+}
+
+@media (max-width: 500px) {
+    /* 검색 입력 필드가 모바일에서 적절하게 조정되도록 */
+    .mainContainer .mainContent .container .coinFilterArea .logoAndSearch .search .searchFild {
+        max-width: 100%; /* 입력 필드가 모바일 화면의 최대 너비에 맞추도록 */
+        height: 36px; /* 높이를 약간 줄임 */
+        padding: 0 10px; /* 좌우 패딩 줄임 */
+    }
+
+    .mainContainer .mainContent .container .coinFilterArea .logoAndSearch .search .searchFild::placeholder {
+        font-size: 11px;
+    }
+
+    /* 아이콘 크기 축소 */
+    .mainContainer .mainContent .container .coinFilterArea .logoAndSearch .logo .upbit .logoIma,
+    .mainContainer .mainContent .container .coinFilterArea .logoAndSearch .logo .bybit .logoIma {
+        width: 30px;
+        height: 30px;
+    }
+
+    .mainContainer .mainContent .container .coinFilterArea .logoAndSearch .logo .upbit .exchange ,
+    .mainContainer .mainContent .container .coinFilterArea .logoAndSearch .logo .bybit .exchange {
+        font-size: 11px;
+    }
+    
+    .mainContainer .mainContent .container .coinFilterArea .coins .top {
+        gap: 5px; /* 기존의 gap이 큰 경우 값을 줄입니다 */
+    }
+    
+    .mainContainer .mainContent .container .coinFilterArea .coins .top .logoAndName .logo {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* 코인 이름의 폰트 사이즈 축소 */
+    .mainContainer .mainContent .container .coinFilterArea .coins .top .logoAndName .name {
+        font-size: 11px; /* 폰트 사이즈 축소 */
+    }
+
+    .mainContainer .mainContent .container .coinFilterArea .coins .title {
+        font-size: 8px;
+    }
+    
+    /* 코인 정보 섹션에서 아이템들이 너무 크지 않게 조정 */
+    .mainContainer .mainContent .container .coinFilterArea .coins .top .upbitPrice,
+    .mainContainer .mainContent .container .coinFilterArea .coins .top .bybitPrice,
+    .mainContainer .mainContent .container .coinFilterArea .coins .top .kimpPremium {
+        font-size: 11px; /* 폰트 사이즈를 줄여서 가독성을 유지 */
+        padding: 5px; /* 패딩을 줄여서 레이아웃 밀리지 않도록 */
+        flex: 1; /* 각 항목이 동일한 비율로 배치되도록 유지 */
+        min-width: 50px; /* 최소 너비 축소 */
+        height: 64px;
+    }
+    
+    /* 두 가격 섹션 간격 줄이기 */
+    .mainContainer .mainContent .container .coinFilterArea .coins .top .symbol {
+        font-size: 30px; /* 텍스트 크기 축소 */
+    }
+    
+    /* 김치 프리미엄 항목 */
+    .mainContainer .mainContent .container .coinFilterArea .coins .top .kimpPremium {
+        flex: 1.5; /* 다른 항목보다 약간 더 넓게 */
+        flex-grow: 1.5;
+        max-width: 70px; /* 최소 너비 축소 */
+        font-size: 11px;
+        padding: 5px;
+    }
+    
+    /* 하단 정보 박스의 간격 줄이기 */
+    .mainContainer .mainContent .container .coinFilterArea .coins .bottom {
+        gap: 8px; /* 간격 축소 */
+    }
+
+    /* 아래 섹션의 정보 박스들 크기 축소 */
+    .mainContainer .mainContent .container .coinFilterArea .coins .bottom .signedChangeRate,
+    .mainContainer .mainContent .container .coinFilterArea .coins .bottom .lowest52WeekPrice,
+    .mainContainer .mainContent .container .coinFilterArea .coins .bottom .accTradePrice {
+        font-size: 11px; /* 텍스트 크기 축소 */
+        padding: 5px; /* 패딩 줄임 */
+        flex: 1; /* 균일하게 배치되도록 설정 */
+        min-width: 90px; /* 최소 너비 축소 */
+        max-width: 110px;
+    }
 }

@@ -20,7 +20,6 @@ function ChatApp() {
     useEffect(() => {
         // 서버로부터 과거 메시지를 받으면 messageList에 추가
         socket.on('pastMessages', (pastMessages) => {
-            console.log(pastMessages);
             setMessageList(pastMessages);
         });
 

@@ -11,18 +11,18 @@ const TopArea = () => {
     });
 
     const fetchKrwCoinCount = async () => {
-        const upbitUrl = `${process.env.REACT_APP_API_URL}api/krwCoinCount`;
-
+        const upbitUrl = `${process.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_LOCALHOST_API}api/krwCoinCount`;
+        
         try {
             const response = await fetch(upbitUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
-            const data = await response.json();
     
+            const data = await response.json();
+            
             const krwMarket = data.filter(coin => coin.market.startsWith('KRW'));
-
+    
             setMarketData(prevState => ({
                 ...prevState,
                 totalKrwCoins: krwMarket.length
@@ -31,18 +31,18 @@ const TopArea = () => {
             console.error("Failed to fetch Upbit data:", error);
         }
     };
-
+    
     const fetchUsdToKrwExchangeRate = async () => {
-        const exchangeRateUrl = `${process.env.REACT_APP_API_URL}api/usdToKrwExchangeRate`;
+        const exchangeRateUrl = `${process.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_LOCALHOST_API}api/usdToKrwExchangeRate`;
         
         try {
             const response = await fetch(exchangeRateUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-
+    
             const data = await response.json();
-
+    
             setMarketData(prevState => ({
                 ...prevState,
                 usdToKrwExchangeRate: Math.floor(data.usd.krw * 100) / 100,
@@ -51,14 +51,14 @@ const TopArea = () => {
             console.error("Failed to fetch exchange rate:", error);
         }
     };
-
+    
     const fetchGlobalMarketData = async () => {
-        const globalMetricsUrl = `${process.env.REACT_APP_API_URL}/api/globalMarketData`;
+        const globalMetricsUrl = `${process.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_LOCALHOST_API}api/globalMarketData`;
         
         try {
             const response = await fetch(globalMetricsUrl);
             const data = await response.json();
-
+    
             setMarketData(prevState => ({
                 ...prevState,
                 totalMarketCapUsd: data.data.quote.USD.total_market_cap, // 총 시가총액
@@ -72,11 +72,12 @@ const TopArea = () => {
             console.error("Failed to fetch global market data:", error);
         }
     };
+    
 
     useEffect(() => {
         fetchKrwCoinCount();
         fetchUsdToKrwExchangeRate();
-        // fetchGlobalMarketData(); //API 요청 제한 때문에 주석 처리함
+        fetchGlobalMarketData(); //API 요청 제한 때문에 주석 처리함
     }, []);
 
     const priceDirectionTotalMarket = marketData.marketCapChangePercent !== null && marketData.marketCapChangePercent > 0 ? 'rise' : 'fall';

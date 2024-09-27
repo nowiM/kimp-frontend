@@ -18,13 +18,14 @@ function App() {
     const savedConfig = localStorage.getItem('sortConfig');
     return savedConfig ? JSON.parse(savedConfig) : { key: 'acc_trade_price_24h', direction: 'desc' };
   });
+  let conntected = null; //웹소켓 연결 여부를 확인하는 변수
 
   // Socket.io를 통해 데이터를 받아오는 로직
   useEffect(() => {
-    const socket = io(process.env.REACT_APP_API_URL);
+    const socket = io(process.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_LOCALHOST_URL);
 
     socket.on('connect', () => {
-      console.log("서버와 Socket.io 연결 성공");
+      conntected = true;
     });
 
     socket.on('initial', (message) => {
@@ -93,7 +94,7 @@ function App() {
     });
 
     socket.on('disconnect', () => {
-      console.log("서버와의 연결이 끊어졌습니다.");
+      conntected = false;
     });
 
     return () => {

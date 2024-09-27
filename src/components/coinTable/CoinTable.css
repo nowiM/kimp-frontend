@@ -31,8 +31,8 @@
 
 /* tr 요소에 line-height 및 border-bottom 추가 */
 .kimpTable .container .table tr {
-    line-height: 30px;
     display: flex;
+    line-height: 30px;
 }
 
 .kimpTable .container .table tr:hover {
@@ -64,7 +64,7 @@
 
 .kimpTable .container .table th.upbitTh,
 .kimpTable .container .table td.upbitTd {
-    flex: 1.1; /* 업비트 열 */
+    flex: 1; /* 업비트 열 */
 }
 
 .kimpTable .container .table th.signedChangeRateTh,
@@ -74,7 +74,7 @@
 
 .kimpTable .container .table th.lowest52WeekPriceTh,
 .kimpTable .container .table td.lowest52WeekPriceTd {
-    flex: 1.1; /* 52주 최저 열 */
+    flex: 1; /* 52주 최저 열 */
 }
 
 .kimpTable .container .table th.accTradePriceTh,
@@ -130,8 +130,31 @@
     color: black;
 }
 
+/* 반응형 테이블 설계 - width 조정 중심 */
+
 @media (max-width: 990px) {
     .kimpTable .container .table {
-        font-size: 10px;
+        font-size: 11px;
+    }
+    .kimpTable .container .table th.simbolInfoTh,
+    .kimpTable .container .table td.simbolInfoTd {
+        min-width: 60px;
+    }
+}
+
+@media (max-width: 500px) {
+    .kimpTable .container .table {
+        font-size: 8px;
+    }
+    .kimpTable .container .table .tableHeader {
+        font-size: 6px;
+    }
+
+    .kimpTable .container .table tr {
+        line-height: 20px;
+    }
+
+    .kimpTable .container .table .tableHeader tr th .triangle {
+        font-size: 6px;
     }
 }
