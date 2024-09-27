@@ -11,20 +11,18 @@ const TopArea = () => {
     });
 
     const fetchKrwCoinCount = async () => {
-        const upbitUrl = process.env.NODE_ENV === 'production' 
-            ? `${process.env.REACT_APP_BACKEND_URL}api/krwCoinCount`
-            : `${process.env.REACT_APP_LOCALHOST_API}api/krwCoinCount`;
-        
+        const upbitUrl = `${process.env.REACT_APP_BACKEND_URL}api/krwCoinCount`;
+
         try {
             const response = await fetch(upbitUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-    
+
             const data = await response.json();
-            
-            const krwMarket = data.filter(coin => coin.market.startsWith('KRW'));
     
+            const krwMarket = data.filter(coin => coin.market.startsWith('KRW'));
+
             setMarketData(prevState => ({
                 ...prevState,
                 totalKrwCoins: krwMarket.length
@@ -33,20 +31,18 @@ const TopArea = () => {
             console.error("Failed to fetch Upbit data:", error);
         }
     };
-    
+
     const fetchUsdToKrwExchangeRate = async () => {
-        const exchangeRateUrl = process.env.NODE_ENV === 'production' 
-            ? `${process.env.REACT_APP_BACKEND_URL}api/usdToKrwExchangeRate`
-            : `${process.env.REACT_APP_LOCALHOST_API}api/usdToKrwExchangeRate`;
-    
+        const exchangeRateUrl = `${process.env.REACT_APP_BACKEND_URL}api/usdToKrwExchangeRate`;
+        
         try {
             const response = await fetch(exchangeRateUrl);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-    
+
             const data = await response.json();
-    
+
             setMarketData(prevState => ({
                 ...prevState,
                 usdToKrwExchangeRate: Math.floor(data.usd.krw * 100) / 100,
@@ -55,20 +51,18 @@ const TopArea = () => {
             console.error("Failed to fetch exchange rate:", error);
         }
     };
-    
+
     const fetchGlobalMarketData = async () => {
-        const globalMetricsUrl = process.env.NODE_ENV === 'production' 
-            ? `${process.env.REACT_APP_BACKEND_URL}api/globalMarketData`
-            : `${process.env.REACT_APP_LOCALHOST_API}api/globalMarketData`;
-    
+        const globalMetricsUrl = `${process.env.REACT_APP_BACKEND_URL}/api/globalMarketData`;
+        
         try {
             const response = await fetch(globalMetricsUrl);
             const data = await response.json();
-    
+
             setMarketData(prevState => ({
                 ...prevState,
                 totalMarketCapUsd: data.data.quote.USD.total_market_cap, // 총 시가총액
-                marketCapChangePercent: data.data.quote.USD.total_market_cap_yesterday_percentage_change, // 시가총액 변동율
+                marketCapChangePercent: data.data.quote.USD.total_market_cap_yesterday_percentage_change, // 시간총액 변동율
                 totalVolume24hUsd: data.data.quote.USD.total_volume_24h, // 총 거래량 
                 volumeChangePercent: data.data.quote.USD.total_volume_24h_yesterday_percentage_change, // 거래량 변동율
                 btcDominance: data.data.btc_dominance, // 비트코인 도미넌스

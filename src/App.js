@@ -18,16 +18,11 @@ function App() {
     const savedConfig = localStorage.getItem('sortConfig');
     return savedConfig ? JSON.parse(savedConfig) : { key: 'acc_trade_price_24h', direction: 'desc' };
   });
-  let conntected = null; //웹소켓 연결 여부를 확인하는 변수
+  let conntected = null; //웹소켓 연결 여부를 확인하기 위한 변수
 
   // Socket.io를 통해 데이터를 받아오는 로직
   useEffect(() => {
-    const socket = io(
-      process.env.NODE_ENV === 'production'
-        ? process.env.REACT_APP_BACKEND_URL // 배포 환경에서는 이 URL 사용
-        : process.env.REACT_APP_LOCALHOST_URL // 개발 환경에서는 이 URL 사용
-    );
-    
+    const socket = io(process.env.REACT_APP_BACKEND_URL);
 
     socket.on('connect', () => {
       conntected = true;
