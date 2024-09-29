@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import TopArea from '../components/topArea/TopArea';
-import CoinFilterArea from '../components/coinFilterArea/CoinFilterArea';
-import CoinTable from '../components/coinTable/CoinTable';
-import ChatApp from '../components/chatApp/ChatApp';
-import updatePremium from '../modules/updatePremium';
+import TopArea from '../src/components/topArea/TopArea';
+import CoinFilterArea from '../src/components/coinFilterArea/CoinFilterArea';
+import CoinTable from '../src/components/coinTable/CoinTable';
+import ChatApp from '../src/components/chatApp/ChatApp';
+import updatePremium from '../src/modules/updatePremium';
 
 export async function getServerSideProps() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/krwCoinCount`);
