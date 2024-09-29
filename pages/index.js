@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
-import TopArea from './components/topArea/TopArea'; 
-import CoinFilterArea from './components/coinFilterArea/CoinFilterArea';
-import CoinTable from './components/coinTable/CoinTable';
-import ChatApp from './components/chatApp/ChatApp'; 
+import TopArea from '../components/topArea/TopArea';
+import CoinFilterArea from '../components/coinFilterArea/CoinFilterArea';
+import CoinTable from '../components/coinTable/CoinTable';
+import ChatApp from '../components/chatApp/ChatApp';
+import updatePremium from '../modules/updatePremium';
 
-import updatePremium from './modules/updatePremium';
-import './index.css';
+export async function getServerSideProps() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/krwCoinCount`);
+  const initialCoinData = await res.json();
 
-function App() {
+  return {
+    props: {
+      initialCoinData,
+    },
+  };
+}
+
+function HomePage({ initialCoinData }) {
   const [coinData, setCoinData] = useState({});
   const [exchangeRate, setExchangeRate] = useState(null);
   const [selectedCoin, setSelectedCoin] = useState('BTC');
@@ -18,27 +27,32 @@ function App() {
     const savedConfig = localStorage.getItem('sortConfig');
     return savedConfig ? JSON.parse(savedConfig) : { key: 'acc_trade_price_24h', direction: 'desc' };
   });
-  let conntected = null; //웹소켓 연결 여부를 확인하기 위한 변수
+  let connected = null; // 웹소켓 연결 여부 확인용 변수
+
+  // 초기 데이터 설정
+  useEffect(() => {
+    setCoinData(initialCoinData); // 서버에서 받아온 초기 데이터를 설정
+  }, [initialCoinData]);
 
   // Socket.io를 통해 데이터를 받아오는 로직
   useEffect(() => {
-    const socket = io(process.env.REACT_APP_BACKEND_URL);
+    const socket = io(process.env.NEXT_PUBLIC_BACKEND_URL);
 
     socket.on('connect', () => {
-      conntected = true;
+      connected = true;
     });
 
     socket.on('initial', (message) => {
       try {
         setExchangeRate(message.exchangeRate);
-  
+
         const { upbit, bybit } = message.data;
         const formattedData = {};
-  
+
         for (const ticker in upbit) {
           const upbitData = upbit[ticker];
           const bybitData = bybit[ticker] || { price: null };
-  
+
           formattedData[ticker] = {
             ticker: ticker,
             upbitPrice: upbitData.price,
@@ -48,8 +62,8 @@ function App() {
             acc_trade_price_24h: upbitData.acc_trade_price_24h,
           };
         }
-  
-        setCoinData(formattedData); // 초기 데이터는 비교 없이 바로 설정
+
+        setCoinData(formattedData); // 초기 데이터를 설정
       } catch (error) {
         console.error("Error parsing initial data:", error);
       }
@@ -57,7 +71,7 @@ function App() {
 
     socket.on('upbit', (message) => {
       const { ticker, price, signedChangeRate, acc_trade_price_24h } = message;
-  
+
       setCoinData((prevData) => {
         const updatedData = { ...prevData };
 
@@ -68,14 +82,14 @@ function App() {
         updatedData[ticker].upbitPrice = price;
         updatedData[ticker].signedChangeRate = signedChangeRate;
         updatedData[ticker].acc_trade_price_24h = acc_trade_price_24h;
-  
+
         return updatedData;
       });
     });
 
     socket.on('bybit', (message) => {
       const { ticker, price } = message;
-  
+
       setCoinData((prevData) => {
         const updatedData = { ...prevData };
 
@@ -84,7 +98,7 @@ function App() {
         }
 
         updatedData[ticker].bybitPrice = price;
-  
+
         return updatedData;
       });
     });
@@ -94,7 +108,7 @@ function App() {
     });
 
     socket.on('disconnect', () => {
-      conntected = false;
+      connected = false;
     });
 
     return () => {
@@ -105,12 +119,12 @@ function App() {
   // 코인 데이터를 정렬하는 로직
   useEffect(() => {
     const sortedData = Object.keys(coinData)
-      .map(ticker => ({ ticker, ...coinData[ticker] }))
-      .filter(coin => coin.ticker.toLowerCase().includes(searchTerm.toLowerCase())) // 검색어로 필터링
+      .map((ticker) => ({ ticker, ...coinData[ticker] }))
+      .filter((coin) => coin.ticker.toLowerCase().includes(searchTerm.toLowerCase())) // 검색어로 필터링
       .sort((a, b) => {
         const { key, direction } = sortConfig;
 
-        // 김치 프리미엄 백분율에 대한 정렬을 추가
+        // 김치 프리미엄 백분율에 대한 정렬 추가
         if (key === 'premiumValue') {
           const aPremium = updatePremium(a.ticker, a, exchangeRate).premiumRate;
           const bPremium = updatePremium(b.ticker, b, exchangeRate).premiumRate;
@@ -178,4 +192,4 @@ function App() {
   );
 }
 
-export default App;
+export default HomePage;
