@@ -11,7 +11,7 @@ const TopArea = () => {
     });
 
     const fetchKrwCoinCount = async () => {
-        const upbitUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}api/krwCoinCount`;
+        const upbitUrl = `${process.env.REACT_APP_API_URL}api/krwCoinCount`;
 
         try {
             const response = await fetch(upbitUrl);
@@ -33,7 +33,7 @@ const TopArea = () => {
     };
 
     const fetchUsdToKrwExchangeRate = async () => {
-        const exchangeRateUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}api/usdToKrwExchangeRate`;
+        const exchangeRateUrl = `${process.env.REACT_APP_API_URL}api/usdToKrwExchangeRate`;
         
         try {
             const response = await fetch(exchangeRateUrl);
@@ -53,7 +53,7 @@ const TopArea = () => {
     };
 
     const fetchGlobalMarketData = async () => {
-        const globalMetricsUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/globalMarketData`;
+        const globalMetricsUrl = `${process.env.REACT_APP_API_URL}/api/globalMarketData`;
         
         try {
             const response = await fetch(globalMetricsUrl);
