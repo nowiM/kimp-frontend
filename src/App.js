@@ -22,7 +22,7 @@ function App() {
 
   // Socket.io를 통해 데이터를 받아오는 로직
     useEffect(() => {
-        const socket = io('http://localhost:8000');
+        const socket = io(process.env.REACT_APP_BACKEND_URL);
 
         socket.on('connect', () => {
             conntected = true;
