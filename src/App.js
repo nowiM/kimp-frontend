@@ -22,75 +22,75 @@ function App() {
 
   // Socket.io를 통해 데이터를 받아오는 로직
     useEffect(() => {
-        const socket = io(process.env.REACT_APP_BACKEND_URL);
+        const socket = io('http://localhost:8000');
 
         socket.on('connect', () => {
-        conntected = true;
+            conntected = true;
         });
 
         socket.on('initial', (message) => {
-        try {
-            setExchangeRate(message.exchangeRate);
-    
-            const { upbit, bybit } = message.data;
-            const formattedData = {};
-    
-            for (const ticker in upbit) {
-            const upbitData = upbit[ticker];
-            const bybitData = bybit[ticker] || { price: null };
-    
-            formattedData[ticker] = {
-                ticker: ticker,
-                upbitPrice: upbitData.price,
-                bybitPrice: bybitData.price,
-                signedChangeRate: upbitData.signedChangeRate,
-                lowest_52_week_price: upbitData.lowest_52_week_price,
-                acc_trade_price_24h: upbitData.acc_trade_price_24h,
-            };
+            try {
+                setExchangeRate(message.exchangeRate);
+        
+                const { upbit, bybit } = message.data;
+                const formattedData = {};
+        
+                for (const ticker in upbit) {
+                const upbitData = upbit[ticker];
+                const bybitData = bybit[ticker] || { price: null };
+        
+                formattedData[ticker] = {
+                    ticker: ticker,
+                    upbitPrice: upbitData.price,
+                    bybitPrice: bybitData.price,
+                    signedChangeRate: upbitData.signedChangeRate,
+                    lowest_52_week_price: upbitData.lowest_52_week_price,
+                    acc_trade_price_24h: upbitData.acc_trade_price_24h,
+                };
+                }
+        
+                setCoinData(formattedData); // 초기 데이터는 비교 없이 바로 설정
+            } catch (error) {
+                console.error("Error parsing initial data:", error);
             }
-    
-            setCoinData(formattedData); // 초기 데이터는 비교 없이 바로 설정
-        } catch (error) {
-            console.error("Error parsing initial data:", error);
-        }
         });
 
         socket.on('upbit', (message) => {
-        const { ticker, price, signedChangeRate, acc_trade_price_24h } = message;
-    
-        setCoinData((prevData) => {
-            const updatedData = { ...prevData };
+            const { ticker, price, signedChangeRate, acc_trade_price_24h } = message;
+        
+            setCoinData((prevData) => {
+                const updatedData = { ...prevData };
 
-            if (!updatedData[ticker]) {
-            updatedData[ticker] = { upbitPrice: null, bybitPrice: null, signedChangeRate: null, acc_trade_price_24h: null };
-            }
+                if (!updatedData[ticker]) {
+                updatedData[ticker] = { upbitPrice: null, bybitPrice: null, signedChangeRate: null, acc_trade_price_24h: null };
+                }
 
-            updatedData[ticker].upbitPrice = price;
-            updatedData[ticker].signedChangeRate = signedChangeRate;
-            updatedData[ticker].acc_trade_price_24h = acc_trade_price_24h;
-    
-            return updatedData;
-        });
+                updatedData[ticker].upbitPrice = price;
+                updatedData[ticker].signedChangeRate = signedChangeRate;
+                updatedData[ticker].acc_trade_price_24h = acc_trade_price_24h;
+        
+                return updatedData;
+            });
         });
 
         socket.on('bybit', (message) => {
-        const { ticker, price } = message;
-    
-        setCoinData((prevData) => {
-            const updatedData = { ...prevData };
+            const { ticker, price } = message;
+        
+            setCoinData((prevData) => {
+                const updatedData = { ...prevData };
 
-            if (!updatedData[ticker]) {
-            updatedData[ticker] = { upbitPrice: null, bybitPrice: null, signedChangeRate: null, acc_trade_price_24h: null };
-            }
+                if (!updatedData[ticker]) {
+                updatedData[ticker] = { upbitPrice: null, bybitPrice: null, signedChangeRate: null, acc_trade_price_24h: null };
+                }
 
-            updatedData[ticker].bybitPrice = price;
-    
-            return updatedData;
-        });
+                updatedData[ticker].bybitPrice = price;
+        
+                return updatedData;
+            });
         });
 
         socket.on('exchangeRateUpdate', (message) => {
-        setExchangeRate(message.exchangeRate);
+            setExchangeRate(message.exchangeRate);
         });
 
         socket.on('disconnect', () => {
@@ -150,7 +150,7 @@ function App() {
     return (
         <div className='mainContainer'>
         <div className='topArea'>
-            <TopArea />
+            <TopArea exchangeRate = {exchangeRate}/>
         </div>
         <div className='mainContent'>
             <div className='container width1200 width990 width770 widthother'>
