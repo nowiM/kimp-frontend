@@ -29,6 +29,8 @@
 .mainContainer .mainContent .container .coinFilterArea .logoAndSearch .logo .bybit {
     display: flex;
     align-items: center;
+    text-decoration: none;
+    color: black;
     cursor: pointer;
 }
 
