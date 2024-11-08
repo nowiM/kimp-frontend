@@ -26,17 +26,17 @@ const CoinFilterArea = ({ coin, data, exchangeRate, onSearch }) => {
     <div className="coinFilterArea">
       <div className="logoAndSearch">
         <div className="logo">
-          <div className="upbit" onClick={() => window.open('https://upbit.com/home', '_blank')}>
+          <a className="upbit" target='_blank' href='https://upbit.com/home'>
             <span className="exchange rightMargin">업비트 KRW</span>
             <img className="logoIma" src={upbitLogo} alt="upbit Logo" />
-          </div>
+          </a>
 
           <img className="twoWayArrowIcon" src={twoWayArrow} alt="twoWayArrow Icon" />
 
-          <div className="bybit" onClick={() => window.open('https://www.bybit.com/en', '_blank')}>
+          <a className="bybit" target='_blank' href='https://www.bybit.com/en'>
             <img className="logoIma bybitBorder" src={bybitLogo} alt="bybit Logo" />
-            <span className="exchange leftMargin">바이비트 USDT마켓</span>
-          </div>
+            <span className="exchange leftMargin">바이비트 USDT</span>
+          </a>
         </div>
         <div className="search">
           <input 
