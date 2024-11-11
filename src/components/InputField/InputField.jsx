@@ -11,8 +11,7 @@ const InputField = ({message,setMessage,sendMessage}) => {
           placeholder="채팅을 입력하세요."
           value={message}
           onChange={(event) => setMessage(event.target.value)}
-          multiline={false}
-          rows={1}
+          multiline={true}
           name={'input'}
         />
 
