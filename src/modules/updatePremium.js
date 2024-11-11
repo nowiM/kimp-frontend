@@ -5,8 +5,8 @@ const updatePremium = (ticker, data, exchangeRate) => {
 
     if (data.upbitPrice !== null && data.bybitPrice !== null && exchangeRate !== null) {
         if (ticker === 'SHIB') {
-            premiumValue = data.upbitPrice - data.bybitPrice; // 김프 금액
-            premiumRate = data.upbitPrice / data.bybitPrice; // 김프율
+            premiumValue = data.upbitPrice - ((data.bybitPrice * exchangeRate) / 1000); // 김프 금액
+            premiumRate = data.upbitPrice / ((data.bybitPrice * exchangeRate) / 1000) * 100 - 100; // 김프율
         } else {
             premiumValue = data.upbitPrice - (data.bybitPrice * exchangeRate);
             premiumRate = (data.upbitPrice / (data.bybitPrice * exchangeRate)) * 100 - 100; // 김프율
