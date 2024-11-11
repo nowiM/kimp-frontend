@@ -121,25 +121,36 @@ function App() {
         };
     }, []);
     
-
+    
     // 코인 데이터를 정렬하는 로직
     const sortedData = useMemo(() => {
         return Object.keys(coinData)
-            .map(ticker => ({ ticker, ...coinData[ticker] }))
-            .filter(coin => coin.ticker.toLowerCase().includes(searchTerm.toLowerCase()))
-            .sort((a, b) => {
-                const { key, direction } = sortConfig;
+        .map(ticker => ({ ticker, ...coinData[ticker] }))
+        .filter(coin => coin.ticker.toLowerCase().includes(searchTerm.toLowerCase()))
+        .sort((a, b) => {
+            const { key, direction } = sortConfig;
 
-                if (key === 'premiumValue') {
-                    const aPremium = updatePremium(a.ticker, a, exchangeRate).premiumRate;
-                    const bPremium = updatePremium(b.ticker, b, exchangeRate).premiumRate;
-                    return direction === 'asc' ? aPremium - bPremium : bPremium - aPremium;
-                }
+            // premiumValue를 기준으로 정렬할 때
+            if (key === 'premiumValue') {
+                const aPremium = updatePremium(a.ticker, a, exchangeRate).premiumRate;
+                const bPremium = updatePremium(b.ticker, b, exchangeRate).premiumRate;
 
-                return direction === 'asc' ? (a[key] > b[key] ? 1 : -1) : (a[key] < b[key] ? 1 : -1);
-            });
+                if (aPremium === '') return 1; // a가 null이면 b보다 뒤로 보냄
+                if (bPremium === '') return -1; // b가 null이면 a보다 앞으로 보냄
+                // console.log(aPremium, bPremium);
+                return direction === 'asc' ? aPremium - bPremium : bPremium - aPremium;
+            }
+
+            // 일반적인 정렬 기준에서 null 처리
+            if (a[key] === null) return 1;  // a가 null이면 b보다 뒤로 보냄
+            if (b[key] === null) return -1; // b가 null이면 a보다 앞으로 보냄
+
+            return direction === 'asc' ? (a[key] > b[key] ? 1 : -1) : (a[key] < b[key] ? 1 : -1);
+        });
     }, [coinData, sortConfig, searchTerm, exchangeRate]);
 
+    
+    // console.log(sortedData);
     useEffect(() => {
         setSortedCoinData(sortedData);
     }, [sortedData]);
