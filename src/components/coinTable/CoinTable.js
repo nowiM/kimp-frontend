@@ -1,9 +1,8 @@
 import React from 'react';
 import CoinRow from './CoinRow';
 import './CoinTable.css';
-import triangleIcon from'../images/triangle_icon.svg'
 
-const CoinTable = ({ coinData, exchangeRate, onCoinClick, onSort, sortConfig }) => {
+const CoinTable = ({ coinData, exchangeRate, onCoinClick, onSort, sortConfig, onBookmarkToggle }) => {
   const getSortIndicator = (key) => {
     if (sortConfig.key === key) {
       return sortConfig.direction === 'asc' ? '▲' : '▼';
@@ -61,6 +60,7 @@ const CoinTable = ({ coinData, exchangeRate, onCoinClick, onSort, sortConfig }) 
                 data={data} 
                 exchangeRate={exchangeRate}
                 onClick={() => onCoinClick(ticker)} 
+                onBookmarkToggle={onBookmarkToggle}
               />
             ))}
           </tbody>

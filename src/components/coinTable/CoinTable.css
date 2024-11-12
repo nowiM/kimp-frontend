@@ -99,7 +99,7 @@
 .kimpTable .container .table .tableBody .simbolInfoTd .left .coinLogo {
     width: 16px;
     height: 16px;
-    margin-right: 10px;
+    margin: 0 5px;
 }
 
 .kimpTable .container .table .tableBody .simbolInfoTd .right {
@@ -128,6 +128,28 @@
 
 .kimpTable .container .table .tableBody .even {/*역프*/
     color: black;
+}
+
+/* .fluctuation-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.fluctuation {
+    width: auto;
+    height: 30px;
+} */
+
+.bookmarkImg {
+    width: 14px;
+    height: 14px;
+}
+
+.fluctuation {
+    width: 100%;
+    height: 100%;
 }
 
 /* 반응형 테이블 설계 - width 조정 중심 */
