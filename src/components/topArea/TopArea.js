@@ -61,7 +61,6 @@ const TopArea = ({exchangeRate}) => {
     const priceDirectionTotalMarket = marketData.marketCapChangePercent !== null && marketData.marketCapChangePercent > 0 ? 'rise' : 'fall';
     const priceDirectionTotalVolue = marketData.volumeChangePercent !== null && marketData.volumeChangePercent > 0 ? 'rise' : 'fall';
 
-    console.log(exchangeRate);
     return (
         <div className='container'>
             <span className='item'>
