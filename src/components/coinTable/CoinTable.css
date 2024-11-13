@@ -54,7 +54,7 @@
 /* 열 별 flex 비율 조정 */
 .kimpTable .container .table th.simbolInfoTh,
 .kimpTable .container .table td.simbolInfoTd {
-    min-width: 75px;
+    width: 80px;
 }
 
 .kimpTable .container .table th.bybitTh,
@@ -89,6 +89,11 @@
 
 .kimpTable .container .table .tableBody .simbolInfoTd {
     display: flex;
+}
+
+.kimpTable .container .table .tableBody .simbolInfoTd .bookmark .bookmarkImg {
+    width: 14px;
+    height: 14px;
 }
 
 .kimpTable .container .table .tableBody .simbolInfoTd .left {
@@ -130,30 +135,37 @@
     color: black;
 }
 
-/* .fluctuation-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.fluctuation {
-    width: auto;
-    height: 30px;
-} */
-
-.bookmarkImg {
-    width: 14px;
-    height: 14px;
-}
-
+/* 업비트 가격과 바이비트 가격 변동 시 배경색 변경 */
 .fluctuation {
     width: 100%;
     height: 100%;
+}
+
+@keyframes colorChangeUp {
+    0% { background-color: #C6E7FF; }
+    25% { background-color: #d4edff; }
+    50% { background-color: #e3f3ff; }
+    100% { background-color: #f0f9ff; }
+}
+
+@keyframes colorChangeDown {
+    0% { background-color: #F3CACA; }
+    25% { background-color: #f1d0d0; }
+    50% { background-color: #f0d9d9; }
+    100% { background-color: #f0e0e0; }
+}
+
+.up {
+    animation: colorChangeUp 1s ease forwards;
+    animation-duration: 1s;
+}
+
+.down {
+    animation: colorChangeDown 1s ease forwards;
+    animation-duration: 1s;
 }
 
 /* 반응형 테이블 설계 - width 조정 중심 */
-
 @media (max-width: 990px) {
     .kimpTable .container .table {
         font-size: 11px;
@@ -164,12 +176,27 @@
     }
 }
 
+@media (max-width: 770px) {
+    .kimpTable .container {
+        padding: 0 3px;
+        border-radius: 0;
+    }
+}
+
 @media (max-width: 500px) {
     .kimpTable .container .table {
-        font-size: 8px;
+        font-size: 10px;
     }
     .kimpTable .container .table .tableHeader {
-        font-size: 6px;
+        font-size: 8px;
+    }
+    /* 모바일 환경에선 52주 최저 제거 */
+    .lowest52WeekPriceTh {
+        display: none;
+    }
+
+    .lowest52WeekPriceTd {
+        display: none;
     }
 
     .kimpTable .container .table tr {
@@ -177,6 +204,17 @@
     }
 
     .kimpTable .container .table .tableHeader tr th .triangle {
-        font-size: 6px;
+        font-size: 8px;
+    }
+
+    /* 열 별 flex 비율 조정 */
+    .kimpTable .container .table th.simbolInfoTh,
+    .kimpTable .container .table td.simbolInfoTd {
+        width: 65px;
+    }
+
+    .kimpTable .container .table th.premiumTh,
+    .kimpTable .container .table td.premiumTd {
+        flex: 1.5; /* 김치프리미엄 열 */
     }
 }

@@ -230,6 +230,10 @@
 }
 
 @media (max-width: 770px) {
+    .mainContainer .mainContent .container .coinFilterArea {
+        border-radius: 0;
+    }
+    
     .mainContainer .mainContent .container .coinFilterArea .coins .top .upbitPrice,
     .mainContainer .mainContent .container .coinFilterArea .coins .top .bybitPrice {
         flex-grow: 1;

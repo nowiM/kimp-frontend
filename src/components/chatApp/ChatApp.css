@@ -57,3 +57,8 @@
     box-sizing: border-box; /* 패딩과 테두리를 너비와 높이에 포함시켜 레이아웃이 흐트러지지 않도록 설정 */
 }
 
+@media (max-width: 770px) {
+    .chatApp {
+        border-radius: 0;
+    }
+}

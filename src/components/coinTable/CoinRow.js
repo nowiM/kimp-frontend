@@ -8,30 +8,32 @@ const CoinRow = ({ ticker, data, exchangeRate, onClick, onBookmarkToggle }) => {
   const { premiumClass, premiumValue, premiumRate } = updatePremium(ticker, data, exchangeRate);
   const signedChangeClass = data.signedChangeRate > 0 ? "rise" : data.signedChangeRate < 0 ? "fall" : "even";
   const isBookmarked = data.isBookmarked;
-  
+
   // 가격 변동 추적을 위한 state
   const [previousBybitPrice, setPreviousBybitPrice] = useState(data.bybitPrice);
   const [previousUpbitPrice, setPreviousUpbitPrice] = useState(data.upbitPrice);
 
-  // 가격 등락 스타일
-  const bybitFluctuationStyle = {
-    backgroundColor: data.bybitPrice > previousBybitPrice ? '#F3CACA' : data.bybitPrice < previousBybitPrice ? '#C6E7FF' : 'white'
-  };
+  // 애니메이션 상태 추가
+  const [bybitAnimation, setBybitAnimation] = useState('');
+  const [upbitAnimation, setUpbitAnimation] = useState('');
 
-  const upbitFluctuationStyle = {
-    backgroundColor: data.upbitPrice > previousUpbitPrice ? '#F3CACA' : data.upbitPrice < previousUpbitPrice ? '#C6E7FF' : 'white'
-  };
-
-  // 실시간 가격 변화를 감지하여 이전 가격 업데이트
   useEffect(() => {
     if (data.bybitPrice !== previousBybitPrice) {
+      setBybitAnimation(data.bybitPrice > previousBybitPrice ? 'up' : 'down');
       setPreviousBybitPrice(data.bybitPrice);
+
+      // 애니메이션이 끝난 후 클래스 초기화
+      setTimeout(() => setBybitAnimation(''), 1000); // 1초 후 초기화
     }
   }, [data.bybitPrice, previousBybitPrice]);
 
   useEffect(() => {
     if (data.upbitPrice !== previousUpbitPrice) {
+      setUpbitAnimation(data.upbitPrice > previousUpbitPrice ? 'up' : 'down');
       setPreviousUpbitPrice(data.upbitPrice);
+
+      // 애니메이션이 끝난 후 클래스 초기화
+      setTimeout(() => setUpbitAnimation(''), 1000); // 1초 후 초기화
     }
   }, [data.upbitPrice, previousUpbitPrice]);
 
@@ -42,7 +44,7 @@ const CoinRow = ({ ticker, data, exchangeRate, onClick, onBookmarkToggle }) => {
             e.stopPropagation();
             onBookmarkToggle(ticker);
         }}>
-          <img src={isBookmarked ? `./bookmark-on.svg` : `./bookmark-off.svg`} alt="" className="bookmarkImg"/>
+          <img className="bookmarkImg" src={isBookmarked ? `./bookmark-on.svg` : `./bookmark-off.svg`} alt="bookmarkImg"/>
         </div>
         <div className="left">
           <img className="coinLogo" src={`https://static.upbit.com/logos/${ticker}.png`} alt={ticker} />
@@ -53,13 +55,12 @@ const CoinRow = ({ ticker, data, exchangeRate, onClick, onBookmarkToggle }) => {
       </td>
 
       <td id={`bybit-${ticker}`} className='bybitTd'>
-          <div className="fluctuation" style={bybitFluctuationStyle}>
+          <div className={`fluctuation ${bybitAnimation}`}>
             {formatBybitPrice(data.bybitPrice)}
           </div>
-
       </td>
       <td id={`upbit-${ticker}`} className='upbitTd'>
-            <div className="fluctuation" style={upbitFluctuationStyle}>
+            <div className={`fluctuation ${upbitAnimation}`}>
               {formatUpbitPrice(data.upbitPrice)}
             </div>
       </td>
