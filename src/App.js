@@ -21,16 +21,23 @@ function App() {
     });
     const [bookmarks, setBookmarks] = useState({});
 
-    let connected = null;
+    // WebSocket 관련 변수
+    const MAX_RECONNECT_ATTEMPTS = 5;
+    const MAX_TIME_INTERVAL = 2000;
+    let reconnectAttempts = 0;
+    let reconnectTimeInterval = Math.random() * MAX_TIME_INTERVAL;
+    let socket = null;
 
-    // Socket.io를 통해 데이터를 받아오는 로직
-    useEffect(() => {
-        const socket = io(process.env.REACT_APP_BACKEND_URL);
-    
+    // WebSocket 연결 설정 및 핸들러
+    const startWebSocket = () => {
+        socket = io(process.env.REACT_APP_BACKEND_URL);
+
         socket.on('connect', () => {
-            connected = true;
+            console.log('[WebSocket] Connected');
+            reconnectAttempts = 0; // 연결 성공 시 재연결 시도 초기화
+            reconnectTimeInterval = Math.random() * MAX_TIME_INTERVAL;
         });
-    
+
         socket.on('initial', (message) => {
             try {
                 setExchangeRate(message.exchangeRate);
@@ -52,7 +59,6 @@ function App() {
                 }
     
                 setCoinData((prevData) => {
-                    // 데이터가 변경된 경우에만 업데이트
                     if (JSON.stringify(prevData) !== JSON.stringify(formattedData)) {
                         return formattedData;
                     }
@@ -62,10 +68,9 @@ function App() {
                 console.error("Error parsing initial data:", error);
             }
         });
-    
+
         socket.on('upbit', (message) => {
             const { ticker, price, signedChangeRate, acc_trade_price_24h } = message;
-    
             setCoinData((prevData) => {
                 const updatedData = { ...prevData };
     
@@ -73,7 +78,6 @@ function App() {
                     updatedData[ticker] = { upbitPrice: null, bybitPrice: null, signedChangeRate: null, acc_trade_price_24h: null };
                 }
     
-                // 데이터 변경이 있을 때만 업데이트
                 if (
                     updatedData[ticker].upbitPrice !== price ||
                     updatedData[ticker].signedChangeRate !== signedChangeRate ||
@@ -87,10 +91,9 @@ function App() {
                 return prevData;
             });
         });
-    
+
         socket.on('bybit', (message) => {
             const { ticker, price } = message;
-    
             setCoinData((prevData) => {
                 const updatedData = { ...prevData };
     
@@ -98,7 +101,6 @@ function App() {
                     updatedData[ticker] = { upbitPrice: null, bybitPrice: null, signedChangeRate: null, acc_trade_price_24h: null };
                 }
     
-                // 데이터 변경이 있을 때만 업데이트
                 if (updatedData[ticker].bybitPrice !== price) {
                     updatedData[ticker].bybitPrice = price;
                     return updatedData;
@@ -106,25 +108,38 @@ function App() {
                 return prevData;
             });
         });
-    
+
         socket.on('exchangeRateUpdate', (message) => {
             setExchangeRate((prevRate) => {
-                // exchangeRate에 변화가 있을 때만 업데이트
                 return prevRate !== message.exchangeRate ? message.exchangeRate : prevRate;
             });
         });
-    
-        socket.on('disconnect', () => {
-            connected = false;
+
+        // WebSocket 연결 종료 이벤트
+        socket.on('disconnect', (reason) => {
+            console.warn('[WebSocket] Disconnected:', reason);
+            if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+                reconnectAttempts++;
+                reconnectTimeInterval *= 2; // 지수 백오프
+                const delay = reconnectTimeInterval + Math.random() * MAX_TIME_INTERVAL;
+                console.log(`[WebSocket] Reconnecting in ${delay / 1000}s...`);
+                setTimeout(startWebSocket, delay);
+            } else {
+                console.error('[WebSocket] Max reconnect attempts reached.');
+            }
         });
-    
+    };
+
+    useEffect(() => {
+        startWebSocket();
         return () => {
-            socket.disconnect();
+            if (socket) {
+                socket.disconnect();
+            }
         };
     }, []);
-    
-    
-    // 코인 데이터를 정렬하는 로직 (즐겨찾기 포함)
+
+    // 나머지 정렬 및 상태 업데이트 로직
     const sortedData = useMemo(() => {
         return Object.keys(coinData)
             .map(ticker => ({
@@ -159,7 +174,7 @@ function App() {
             return updatedBookmarks;
         });
     };
-    
+
     useEffect(() => {
         const savedBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || {};
         setBookmarks(savedBookmarks);
