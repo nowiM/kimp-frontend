@@ -21,21 +21,12 @@ function App() {
     });
     const [bookmarks, setBookmarks] = useState({});
 
-    // WebSocket 관련 변수
-    const MAX_RECONNECT_ATTEMPTS = 5;
-    const MAX_TIME_INTERVAL = 2000;
-    let reconnectAttempts = 0;
-    let reconnectTimeInterval = Math.random() * MAX_TIME_INTERVAL;
-    let socket = null;
-
-    // WebSocket 연결 설정 및 핸들러
-    const startWebSocket = () => {
-        socket = io(process.env.REACT_APP_BACKEND_URL);
+    // WebSocket 연결 로직
+    useEffect(() => {
+        const socket = io(process.env.REACT_APP_BACKEND_URL);
 
         socket.on('connect', () => {
             console.log('[WebSocket] Connected');
-            reconnectAttempts = 0; // 연결 성공 시 재연결 시도 초기화
-            reconnectTimeInterval = Math.random() * MAX_TIME_INTERVAL;
         });
 
         socket.on('initial', (message) => {
@@ -115,31 +106,17 @@ function App() {
             });
         });
 
-        // WebSocket 연결 종료 이벤트
-        socket.on('disconnect', (reason) => {
-            console.warn('[WebSocket] Disconnected:', reason);
-            if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
-                reconnectAttempts++;
-                reconnectTimeInterval *= 2; // 지수 백오프
-                const delay = reconnectTimeInterval + Math.random() * MAX_TIME_INTERVAL;
-                console.log(`[WebSocket] Reconnecting in ${delay / 1000}s...`);
-                setTimeout(startWebSocket, delay);
-            } else {
-                console.error('[WebSocket] Max reconnect attempts reached.');
-            }
+        socket.on('disconnect', () => {
+            console.warn('[WebSocket] Disconnected. Reconnecting...');
+            socket.connect(); // 단순 재연결
         });
-    };
 
-    useEffect(() => {
-        startWebSocket();
         return () => {
-            if (socket) {
-                socket.disconnect();
-            }
+            socket.disconnect();
         };
     }, []);
 
-    // 나머지 정렬 및 상태 업데이트 로직
+    // 나머지 로직은 그대로 유지
     const sortedData = useMemo(() => {
         return Object.keys(coinData)
             .map(ticker => ({
