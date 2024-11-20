@@ -77,8 +77,26 @@
 /* Responsive Flexbox for Coin Info Section */
 .mainContainer .mainContent .container .coinFilterArea .coins {
     display: flex;
+    justify-content: center; 
+}
+
+.mainContainer .mainContent .container .coinFilterArea .coins .logoAndNameContainer {
+    flex: 2;
+}
+
+.mainContainer .mainContent .container .coinFilterArea .coins .logoAndName { 
+    display: flex;
     flex-direction: column;
-    gap: 20px;
+    justify-content: center; 
+    align-items: center;  
+    height: 100%;
+}
+
+.mainContainer .mainContent .container .coinFilterArea .coins .topAndBottom {
+    display: flex;
+    flex-direction: column; 
+    flex: 8;
+    gap: 30px;
 }
 
 .mainContainer .mainContent .container .coinFilterArea .coins .top,
@@ -97,14 +115,14 @@
     text-align: center;
 }
 
-.mainContainer .mainContent .container .coinFilterArea .coins .top .logoAndName .logo {
+.mainContainer .mainContent .container .coinFilterArea .coins .logo {
     width: 35px;
     height: 35px;
     object-fit: cover;
     border-radius: 50%;
 }
 
-.mainContainer .mainContent .container .coinFilterArea .coins .top .logoAndName .name {
+.mainContainer .mainContent .container .coinFilterArea .coins .name {
     font-weight: 600;
     margin-top: 5px;
 }
@@ -117,11 +135,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 10px;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     font-size: 16px;
     font-weight: 600;
     color: #333;
@@ -137,6 +150,7 @@
     min-width: 150px; /* 최소 너비 지정 */
     max-width: 250px; /* 최대 너비 지정 */
     width: 100%;
+    text-align: center;
 }
 
 .mainContainer .mainContent .container .coinFilterArea .coins .top .kimpPremium .kimp {
@@ -152,7 +166,6 @@
 .mainContainer .mainContent .container .coinFilterArea .coins .title {
     font-size: 12px;
     color: #777;
-    margin-right: 5px;
 }
 
 /* Symbol between Upbit and Bybit Prices */
@@ -170,11 +183,6 @@
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    padding: 10px;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     font-size: 16px;
     font-weight: 600;
     color: #333;
@@ -291,32 +299,32 @@
 
     .mainContainer .mainContent .container .coinFilterArea .logoAndSearch .logo .upbit .exchange ,
     .mainContainer .mainContent .container .coinFilterArea .logoAndSearch .logo .bybit .exchange {
-        font-size: 11px;
+        font-size: 12px;
     }
     
     .mainContainer .mainContent .container .coinFilterArea .coins .top {
         gap: 5px; /* 기존의 gap이 큰 경우 값을 줄입니다 */
     }
     
-    .mainContainer .mainContent .container .coinFilterArea .coins .top .logoAndName .logo {
-        width: 20px;
-        height: 20px;
+    .mainContainer .mainContent .container .coinFilterArea .coins .logoAndName .logo {
+        width: 30px;
+        height: 30px;
     }
 
     /* 코인 이름의 폰트 사이즈 축소 */
-    .mainContainer .mainContent .container .coinFilterArea .coins .top .logoAndName .name {
-        font-size: 11px; /* 폰트 사이즈 축소 */
+    .mainContainer .mainContent .container .coinFilterArea .coins .logoAndName .name {
+        font-size: 12px; /* 폰트 사이즈 축소 */
     }
 
     .mainContainer .mainContent .container .coinFilterArea .coins .title {
-        font-size: 8px;
+        font-size: 9px;
     }
     
     /* 코인 정보 섹션에서 아이템들이 너무 크지 않게 조정 */
     .mainContainer .mainContent .container .coinFilterArea .coins .top .upbitPrice,
     .mainContainer .mainContent .container .coinFilterArea .coins .top .bybitPrice,
     .mainContainer .mainContent .container .coinFilterArea .coins .top .kimpPremium {
-        font-size: 11px; /* 폰트 사이즈를 줄여서 가독성을 유지 */
+        font-size: 12px; /* 폰트 사이즈를 줄여서 가독성을 유지 */
         padding: 5px; /* 패딩을 줄여서 레이아웃 밀리지 않도록 */
         flex: 1; /* 각 항목이 동일한 비율로 배치되도록 유지 */
         min-width: 50px; /* 최소 너비 축소 */
@@ -346,7 +354,7 @@
     .mainContainer .mainContent .container .coinFilterArea .coins .bottom .signedChangeRate,
     .mainContainer .mainContent .container .coinFilterArea .coins .bottom .lowest52WeekPrice,
     .mainContainer .mainContent .container .coinFilterArea .coins .bottom .accTradePrice {
-        font-size: 11px; /* 텍스트 크기 축소 */
+        font-size: 12px; /* 텍스트 크기 축소 */
         padding: 5px; /* 패딩 줄임 */
         flex: 1; /* 균일하게 배치되도록 설정 */
         min-width: 90px; /* 최소 너비 축소 */

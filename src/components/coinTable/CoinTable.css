@@ -215,6 +215,6 @@
 
     .kimpTable .container .table th.premiumTh,
     .kimpTable .container .table td.premiumTd {
-        flex: 1.5; /* 김치프리미엄 열 */
+        flex: 2; /* 김치프리미엄 열 */
     }
 }

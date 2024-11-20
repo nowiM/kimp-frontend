@@ -61,7 +61,7 @@ function ChatApp() {
     }
 
     return (
-        <div className="chat-app">
+        <div className="chatappComponent">
             <MessageContainer messageList={messageList}/>
             <InputField message={message} setMessage={setMessage} sendMessage={sendMessage}/>
         </div>

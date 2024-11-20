@@ -45,9 +45,19 @@ body {
   flex: 6.5;
 }
 
-.mainContainer .mainContent .container.chatApp {
+.mainContainer .mainContent .container .chatApp {
   flex: 3.5;
+  position: sticky;
+  top: 40px; /* 상단에 고정 */
+  height: 80vh;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column; /* Ensure .messageCotainer and .input-area are vertically aligned */
 }
+
 
 /* 먼저 1200px 이하 규칙 */
 @media (max-width: 1200px) {
@@ -95,14 +105,7 @@ body {
   }
 
   .mainContainer .mainContent .container .chatApp {
-    position: relative; /* sticky 고정을 해제하고 세로 배치 */
-    height: auto; /* 높이를 자동으로 설정 */
-    top: 0; /* 상단에서의 거리 재설정 */
-  }
-  .mainContainer .mainContent .container .coinInfo {
-    flex: 7;
+    border-radius: 0;
+    height: 440px;
   }
 }
-
-
-

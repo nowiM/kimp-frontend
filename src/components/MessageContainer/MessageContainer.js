@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import "./MessageContainer.css";
 import { Container } from "@mui/system";
 
 const MessageContainer = ({ messageList }) => {

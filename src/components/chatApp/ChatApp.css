@@ -1,30 +1,16 @@
-.chatApp {
-    position: sticky;
-    flex: 3;
-    top: 40px; /* 상단에 고정 */
-    height: 80vh;
-    border-radius: 12px;
-    border: 1px solid #ccc;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 추가된 box-shadow */
-    z-index: 1000; /* 다른 요소보다 앞에 오도록 설정 */
-    display: flex;
-    flex-direction: column; /* Ensure .messageCotainer and .input-area are vertically aligned */
-}
-
-.chat-app {
-    height: 100%; /* 부모 컨테이너 높이를 모두 차지 */
+.chatappComponent{
+    height: 100%;
     display: flex;
     flex-direction: column; /* 자식들을 세로로 배치 */
     position: relative;
 }
 
+/* 메세지 창 css */
 .messageCotainer {
+    height: 100%;
     flex: 1; /* 남은 공간을 차지하도록 설정 */
     overflow-y: auto; /* 스크롤이 필요할 경우 스크롤 추가 */
-    padding-bottom: 60px; /* input-area의 높이만큼 공간을 확보 */
 }
-
 
 .messageCotainer::-webkit-scrollbar {  
     width: 8px;
@@ -39,7 +25,27 @@
     background: transparent;
 }
 
+.my-message-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 5px 0;
+    font-size: 13px;
+}
 
+.user-name {
+    font-weight: 600;
+    margin-right: 5px;
+}
+
+.my-message {
+    border-radius: 8px;
+    max-width: 200px;
+    padding: 3px;
+    word-wrap: break-word; /* 긴 단어를 자동으로 줄바꿈 */
+}
+
+/* 입력창 css */
 .input-area {
     position: sticky; /* input-area를 화면의 하단에 고정시키기 위해 sticky 속성 사용 */
     bottom: 0;
@@ -57,8 +63,63 @@
     box-sizing: border-box; /* 패딩과 테두리를 너비와 높이에 포함시켜 레이아웃이 흐트러지지 않도록 설정 */
 }
 
+.input-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 0 12px;
+}
+
+.base-Input-root {
+    width: 80%;
+    display: flex;
+    align-items: center;
+}
+
+.base-Input-root::-webkit-scrollbar {
+    display: none; /* 웹킷 브라우저에서 스크롤바 숨기기 */
+}
+
+.base-Input-root > textarea {
+    width: 100%;
+    max-height: 100%;
+    background-color: #F5F6F9;
+    padding-top: 14px;
+    border: none;
+    resize: none;
+    overflow-y: scroll; /* 스크롤 기능은 유지 */
+    scrollbar-width: none; /* Firefox에서 스크롤바 숨김 */
+}
+
+textarea::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge에서 스크롤바 숨김 */
+}
+
+textarea:focus {
+    outline: none;
+}
+
+.send-button {
+    width: 20%; /* send-button의 너비를 20%로 설정 */
+    border-radius: 0;
+    border: none;
+    background-color: transparent;
+    color: #5f5f5f;
+    font-weight: 600;
+}
+
+.send-button:hover {
+    color: #48CB00;
+    cursor: pointer;
+}
+
 @media (max-width: 770px) {
-    .chatApp {
-        border-radius: 0;
+    .chatappComponent{
+        height: 440px;
+    }
+    
+    .messageCotainer {
+        height: 440px;
+        overflow-y: auto; 
     }
 }
