@@ -116,7 +116,7 @@ function App() {
         };
     }, []);
 
-    // 나머지 로직은 그대로 유지
+    
     const sortedData = useMemo(() => {
         return Object.keys(coinData)
             .map(ticker => ({

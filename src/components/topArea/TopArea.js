@@ -11,7 +11,7 @@ const TopArea = ({exchangeRate}) => {
     });
 
     const fetchKrwCoinCount = async () => {
-        const upbitUrl = `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000/'}api/krwCoinCount`;
+        const upbitUrl = `${process.env.REACT_APP_BACKEND_URL_SSS}api/krwCoinCount`;
 
         try {
             const response = await fetch(upbitUrl);
@@ -32,30 +32,30 @@ const TopArea = ({exchangeRate}) => {
         }
     };
 
-    // const fetchGlobalMarketData = async () => {
-    //     const globalMetricsUrl = `${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000/'}api/globalMarketData`;
+    const fetchGlobalMarketData = async () => {
+        const globalMetricsUrl = `${process.env.REACT_APP_BACKEND_URL_SSS}api/globalMarketData`;
         
-    //     try {
-    //         const response = await fetch(globalMetricsUrl);
-    //         const data = await response.json();
+        try {
+            const response = await fetch(globalMetricsUrl);
+            const data = await response.json();
 
-    //         setMarketData(prevState => ({
-    //             ...prevState,
-    //             totalMarketCapUsd: data.data.quote.USD.total_market_cap, // 총 시가총액
-    //             marketCapChangePercent: data.data.quote.USD.total_market_cap_yesterday_percentage_change, // 시간총액 변동율
-    //             totalVolume24hUsd: data.data.quote.USD.total_volume_24h, // 총 거래량 
-    //             volumeChangePercent: data.data.quote.USD.total_volume_24h_yesterday_percentage_change, // 거래량 변동율
-    //             btcDominance: data.data.btc_dominance, // 비트코인 도미넌스
-    //             ethDominance: data.data.eth_dominance, // 이더리움 도미넌스
-    //         }));
-    //     } catch (error) {
-    //         console.error("Failed to fetch global market data:", error);
-    //     }
-    // };
+            setMarketData(prevState => ({
+                ...prevState,
+                totalMarketCapUsd: data.data.quote.USD.total_market_cap, // 총 시가총액
+                marketCapChangePercent: data.data.quote.USD.total_market_cap_yesterday_percentage_change, // 시간총액 변동율
+                totalVolume24hUsd: data.data.quote.USD.total_volume_24h, // 총 거래량 
+                volumeChangePercent: data.data.quote.USD.total_volume_24h_yesterday_percentage_change, // 거래량 변동율
+                btcDominance: data.data.btc_dominance, // 비트코인 도미넌스
+                ethDominance: data.data.eth_dominance, // 이더리움 도미넌스
+            }));
+        } catch (error) {
+            console.error("Failed to fetch global market data:", error);
+        }
+    };
 
     useEffect(() => {
         fetchKrwCoinCount();
-        //fetchGlobalMarketData(); //API 요청 제한 때문에 주석 처리함
+        fetchGlobalMarketData(); 
     }, []);
 
     const priceDirectionTotalMarket = marketData.marketCapChangePercent !== null && marketData.marketCapChangePercent > 0 ? 'rise' : 'fall';
