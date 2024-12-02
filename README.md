@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# Kimp-Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+김프(Kimp) 관련 데이터를 시각적으로 제공하는 프론트엔드 애플리케이션입니다.  
+React를 사용하여 실시간 암호화폐 데이터를 시각화하며, 사용자 친화적인 UI/UX를 제공합니다.
 
-## Available Scripts
+**개발기간**: 2024.07 ~  
+**배포주소**: [https://kimpviewer.com/](https://kimpviewer.com/)
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 기획 배경
+암호화폐 시장에서 ‘한국 프리미엄’ 데이터를 실시간으로 제공하여 사용자들이 효율적인 투자 결정을 내릴 수 있도록 돕기 위해 개발하게 되었습니다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 주요 기능
+- 실시간 암호화폐 데이터 시각화
+- 김프/역프 데이터를 직관적으로 표시
+- 사용자 친화적인 검색 및 필터링 기능
+  
+---
 
-### `npm test`
+## 기술 스택 (Tech Stack)
+- **프론트엔드 프레임워크**: React  
+- **스타일링**: CSS
+- **아이콘 및 리소스**: SVG, Custom Images  
+- **웹소켓 통신**: 서버와 클라이언트가 웹소켓을 통해 통신
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+# 프로젝트 소개
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<div align="center">
+  <h2>프로젝트 소개</h2>
+</div>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<div style="display: flex; justify-content: space-between; gap: 10px;">
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  <div style="text-align: center;">
+    <img src="loading1.png" alt="회원가입" width="200" />
+    <p><strong>회원가입</strong><br />react-hook-form, yup을 사용해 회원가입 폼을 구현했습니다.</p>
+  </div>
 
-### `npm run eject`
+  <div style="text-align: center;">
+    <img src="loading2.png" alt="마이 페이지" width="200" />
+    <p><strong>마이 페이지</strong><br />구글, 카카오 OAuth 로그인을 할 수 있습니다.</p>
+  </div>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+</div>
