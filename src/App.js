@@ -14,7 +14,6 @@ function App() {
     const [coinData, setCoinData] = useState({});
     const [exchangeRate, setExchangeRate] = useState(null);
     const [selectedCoin, setSelectedCoin] = useState('BTC');
-    const [sortedCoinData, setSortedCoinData] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState(() => {
         const savedConfig = localStorage.getItem('sortConfig');
@@ -22,7 +21,7 @@ function App() {
     });
     const [bookmarks, setBookmarks] = useState({});
 
-    // WebSocket 연결 로직
+    // WebSocket 연결 및 데이터 관리
     useEffect(() => {
         const socket = createWebsocket(process.env.REACT_APP_BACKEND_URL, { setCoinData, setExchangeRate });
         
@@ -31,6 +30,16 @@ function App() {
         };
     }, []);
 
+    // localStorage에 저장된 북마크 코인들 상태에 저장
+    useEffect(() => {
+        const savedBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || {};
+        setBookmarks(savedBookmarks);
+    }, []);
+
+    // 정렬 기준 변경 시 localStorage에 저장
+    useEffect(() => {
+        localStorage.setItem('sortConfig', JSON.stringify(sortConfig));
+    }, [sortConfig]);
     
     const sortedData = useMemo(() => {
         return Object.keys(coinData)
@@ -67,19 +76,6 @@ function App() {
         });
     };
 
-    useEffect(() => {
-        const savedBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || {};
-        setBookmarks(savedBookmarks);
-    }, []);
-
-    useEffect(() => {
-        setSortedCoinData(sortedData);
-    }, [sortedData]);
-
-    useEffect(() => {
-        localStorage.setItem('sortConfig', JSON.stringify(sortConfig));
-    }, [sortConfig]);
-
     const handleCoinClick = (ticker) => {
         setSelectedCoin(ticker);
     };
@@ -110,7 +106,7 @@ function App() {
                             onSearch={handleSearch}
                         />
                         <CoinTable 
-                            coinData={sortedCoinData} 
+                            coinData={sortedData} 
                             exchangeRate={exchangeRate} 
                             onCoinClick={handleCoinClick} 
                             onSort={handleSort} 
