@@ -7,7 +7,6 @@ import updatePremium from '../../modules/updatePremium.js';
 const CoinRow = ({ ticker, data, exchangeRate, onClick, onBookmarkToggle }) => {
   const { premiumClass, premiumValue, premiumRate } = updatePremium(ticker, data, exchangeRate);
   const signedChangeClass = data.signedChangeRate > 0 ? "rise" : data.signedChangeRate < 0 ? "fall" : "even";
-  const isBookmarked = data.isBookmarked;
 
   // 가격 변동 추적을 위한 state
   const [previousBybitPrice, setPreviousBybitPrice] = useState(data.bybitPrice);
@@ -44,10 +43,15 @@ const CoinRow = ({ ticker, data, exchangeRate, onClick, onBookmarkToggle }) => {
             e.stopPropagation();
             onBookmarkToggle(ticker);
         }}>
-          <img className="bookmarkImg" src={isBookmarked ? `./bookmark-on.svg` : `./bookmark-off.svg`} alt="bookmarkImg"/>
         </div>
         <div className="left">
-          <img className="coinLogo" src={`https://static.upbit.com/logos/${ticker}.png`} alt={ticker} />
+          {/* <img className="coinLogo" src={`https://static.upbit.com/logos/${ticker}.png`} alt={ticker} /> */}
+          <img
+            className="coinLogo"
+            src={`${process.env.REACT_APP_BACKEND_URL}/optimized-logo/${ticker}`}
+            alt={ticker}
+          />
+
         </div>
         <div className="right">
           {ticker}
