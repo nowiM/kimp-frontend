@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const createWebsocket = (backendUrl, {setCoinData, setExchangeRate}) => {
+export const createWebsocket = (backendUrl, {setCoinData, setExchangeRate}) => {
     const socket = io(backendUrl)
 
     socket.on('connect', () => {
@@ -91,5 +91,3 @@ const createWebsocket = (backendUrl, {setCoinData, setExchangeRate}) => {
 
     return socket;
 }
-
-export default createWebsocket;

@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useMemo } from 'react';
-// import io from 'socket.io-client';
 import TopArea from './components/topArea/TopArea'; 
 import CoinFilterArea from './components/coinFilterArea/CoinFilterArea';
 import CoinTable from './components/coinTable/CoinTable';
 import ChatApp from './components/chatApp/ChatApp'; 
 
-import createWebsocket from './utils/createWebsoket';
-import updatePremium from './modules/updatePremium';
+import { createWebsocket } from './utils/createWebsoket';
+import { filterCoins, addBookmarkInfo, sortCoins } from './modules/coinHelpers';
 
 import './index.css';
 
-function App() {
+const App = () => {
     const [coinData, setCoinData] = useState({});
     const [exchangeRate, setExchangeRate] = useState(null);
     const [selectedCoin, setSelectedCoin] = useState('BTC');
@@ -41,33 +40,14 @@ function App() {
         localStorage.setItem('sortConfig', JSON.stringify(sortConfig));
     }, [sortConfig]);
     
-    const sortedData = useMemo(() => {
-        return Object.keys(coinData)
-            .map(ticker => ({
-                ticker,
-                ...coinData[ticker],
-                isBookmarked: bookmarks[ticker] || false,
-            }))
-            .filter(coin => coin.ticker.toLowerCase().includes(searchTerm.toLowerCase()))
-            .sort((a, b) => {
-                if (a.isBookmarked && !b.isBookmarked) return -1;
-                if (!a.isBookmarked && b.isBookmarked) return 1;
-
-                const { key, direction } = sortConfig;
-
-                if (key === 'premiumValue') {
-                    const aPremium = updatePremium(a.ticker, a, exchangeRate).premiumRate;
-                    const bPremium = updatePremium(b.ticker, b, exchangeRate).premiumRate;
-                    return direction === 'asc' ? aPremium - bPremium : bPremium - aPremium;
-                }
-
-                if (a[key] === null) return 1;
-                if (b[key] === null) return -1;
-                
-                return direction === 'asc' ? (a[key] > b[key] ? 1 : -1) : (a[key] < b[key] ? 1 : -1);
-            });
+    // 검색, 북마크 정보 추가, 정렬을 수행한 최종 코인 데이터를 생성
+    const processedCoinData = useMemo(() => {
+        const filteredData = filterCoins(coinData, searchTerm);
+        const dataWithBookmarks = addBookmarkInfo(filteredData, bookmarks);
+        return sortCoins(dataWithBookmarks, sortConfig, exchangeRate);
     }, [coinData, bookmarks, sortConfig, searchTerm, exchangeRate]);
 
+    // 특정 코인의 북마크 상태를 토글하고 로컬 스토리지에 저장
     const handleBookmarkToggle = (ticker) => {
         setBookmarks((prevBookmarks) => {
             const updatedBookmarks = { ...prevBookmarks, [ticker]: !prevBookmarks[ticker] };
@@ -76,10 +56,12 @@ function App() {
         });
     };
 
+    // 사용자가 특정 코인을 클릭했을 때, 선택된 코인 상태를 업데이트
     const handleCoinClick = (ticker) => {
         setSelectedCoin(ticker);
     };
 
+    // 정렬 기준을 변경하고, 토글에 따라 정렬 순서(오름차순:asc, 내림차순:desc)를 변경
     const handleSort = (key) => {
         setSortConfig((prevConfig) => ({
             key,
@@ -87,6 +69,7 @@ function App() {
         }));
     };
 
+    // 검색어 입력시 검색 상태를 업데이트
     const handleSearch = (term) => {
         setSearchTerm(term);
     };
@@ -106,7 +89,7 @@ function App() {
                             onSearch={handleSearch}
                         />
                         <CoinTable 
-                            coinData={sortedData} 
+                            coinData={processedCoinData} 
                             exchangeRate={exchangeRate} 
                             onCoinClick={handleCoinClick} 
                             onSort={handleSort} 
