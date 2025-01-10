@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# 암호화폐 가격 조회 사이트  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**개발 기간**: 2024.07 ~ 현재  
+**배포 주소**: [kimpviewer.com](http://kimpviewer.com)  
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 기획 배경  
+국내 거래소와 해외 거래소 간의 시세 차익은 흔히 '한국 프리미엄'으로 불리며, 이는 암호화폐 투자 결정에 있어 중요한 지표입니다.  
+사용자가 이러한 데이터를 한눈에 파악하고 투자 결정을 도울 수 있도록 정보를 제공하기 위해 본 사이트를 개발했습니다.  
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 주요 기능  
+- 실시간 원/달러 환율 조회
+- 실시간 업비트 거래소 가격 조회
+- 실시간 바이비트 USDT 선물 거래소 가격 조회
+- 업비트 - 바이비트 USDT 선물 거래소 간 시세 차익 계산 및 표시  
+- 북마크, 정렬, 검색 기능을 통한 신속한 암호화폐 데이터 확인
+- 실시간 채팅 기능으로 사용자 간 소통 가능
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 사용 기술  
+-  JavaScript, React, Node.js, Express, Socket.IO, MongoDB(Mongoose), CloudType
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 기술적 이슈와 해결 방안  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 1. 해외 거래소 렌더링 속도 개선  
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **문제** : 해외 거래소 데이터 렌더링 속도 지연 **(20초)**
+- **해결책** :  
+    - 서버에서 국내/해외 거래소 데이터를 저장 후 클라이언트 접속 시 즉시 렌더링하도록 구현  
+- **성과** :  
+    - 렌더링 속도 20초 → 0.3초로 약 **6600% 성능 개선**  
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### 2. 외부 리소스 이미지 최적화  
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- **문제** : 외부 리소스 이미지로 인해 데이터 전송량 증가 및 서버 비용 상승  
+- **선택이유** : 외부 이미지를 직접 최적화할 수 없는 환경에서 프록시 서버를 활용해 네티워크 비용 절감
+- **해결책**:  
+  - 이미지 리사이징 및 포맷 변경(webp)을 통해 최적화  
+  - 외부 리소스를 사용하여 유지보수 효율성을 높임  
+- **성과**:  
+  - **최적화 전** : 7.0MB 전송량, 9.0MB 리소스  
+  - **최적화 후** : 955KB 전송량, 2.9MB 리소스  
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 3. 달러 환율 데이터 업데이트 주기 개선  
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **문제** : API의 하루 1회 업데이트 한계로 인해 실시간 정보 제공 불가  
+- **해결책** :  
+  - 원/달러 환율 API 데이터 로직을 개선하여 3분마다 환율 데이터를 업데이트하는 로직 구현  
+- **성과** :  
+  - 환율 업데이트 주기 24시간 → 3분 축으로 정확한 정보 제공  
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 4. 데이터 테이블 구현 과정에서의 기술 변경  
 
-## Learn More
+- **문제 1** : 실시간 정렬이되지 않는 버그
+    - **해결책** :  `jQuery DataTables` 라이브러리를 사용하여 실시간 정렬 기능 구현  
+    - **선택이유** :  간편한 로직 구현으로 빠르게 정렬 문제 해결 가능  
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- **문제 2** : jQuery DataTables 사용 시 빈번한 렌더링으로 메모리 초과 발생
+    - **해결책** : React로 전환하여 Virtual DOM 활용, 변경된 데이터만 업데이트되도록 구현  
+    - **선택이유** : Virtual DOM을 활용한 효율적인 렌더링과 컴포넌트 기반 구조로 유지보수성과 성능을 동시에 개선하기 위함  
+    - **성과** : 메모리 사용량을 200MB~250MB 수준으로 안정화, DOM 조작 최적화로 성능 향상  
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 5. useEffect의 무한 재렌더링 문제  
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **문제** : `useEffect`의 의존성 배열로 인해 무한 재실행 발생  
+- **해결책**:  
+  - 의존성 배열에 꼭 필요한 값만 포함  
+  - 이전 데이터와 새 데이터를 비교해 상태 변경 시에만 업데이트  
+  - `useMemo`를 활용하여 북마크, 정렬, 검색 데이터를 캐싱  
+- **성과**:  
+  - 불필요한 상태 업데이트 제거로 성능 최적화  
+  - 무한 재렌더링 문제 해결 및 안정적인 렌더링 성능 확보  
+---
