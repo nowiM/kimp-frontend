@@ -1,19 +1,18 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import io from 'socket.io-client';
 import TopArea from './components/topArea/TopArea'; 
 import CoinFilterArea from './components/coinFilterArea/CoinFilterArea';
 import CoinTable from './components/coinTable/CoinTable';
 import ChatApp from './components/chatApp/ChatApp'; 
 
-import updatePremium from './modules/updatePremium';
+import { createWebsocket } from './utils/createWebsoket';
+import { filterCoins, addBookmarkInfo, sortCoins } from './modules/coinHelpers';
 
 import './index.css';
 
-function App() {
+const App = () => {
     const [coinData, setCoinData] = useState({});
     const [exchangeRate, setExchangeRate] = useState(null);
     const [selectedCoin, setSelectedCoin] = useState('BTC');
-    const [sortedCoinData, setSortedCoinData] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState(() => {
         const savedConfig = localStorage.getItem('sortConfig');
@@ -21,129 +20,34 @@ function App() {
     });
     const [bookmarks, setBookmarks] = useState({});
 
-    // WebSocket 연결 로직
+    // WebSocket 연결 및 데이터 관리
     useEffect(() => {
-        const socket = io(process.env.REACT_APP_BACKEND_URL);
-
-        socket.on('connect', () => {
-            console.log('[WebSocket] Connected');
-        });
-
-        socket.on('initial', (message) => {
-            try {
-                setExchangeRate(message.exchangeRate);
-                const { upbit, bybit } = message.data;
-                const formattedData = {};
-    
-                for (const ticker in upbit) {
-                    const upbitData = upbit[ticker];
-                    const bybitData = bybit[ticker] || { price: null };
-    
-                    formattedData[ticker] = {
-                        ticker: ticker,
-                        upbitPrice: upbitData.price,
-                        bybitPrice: bybitData.price,
-                        signedChangeRate: upbitData.signedChangeRate,
-                        lowest_52_week_price: upbitData.lowest_52_week_price,
-                        acc_trade_price_24h: upbitData.acc_trade_price_24h,
-                    };
-                }
-    
-                setCoinData((prevData) => {
-                    if (JSON.stringify(prevData) !== JSON.stringify(formattedData)) {
-                        return formattedData;
-                    }
-                    return prevData;
-                });
-            } catch (error) {
-                console.error("Error parsing initial data:", error);
-            }
-        });
-
-        socket.on('upbit', (message) => {
-            const { ticker, price, signedChangeRate, acc_trade_price_24h } = message;
-            setCoinData((prevData) => {
-                const updatedData = { ...prevData };
-    
-                if (!updatedData[ticker]) {
-                    updatedData[ticker] = { upbitPrice: null, bybitPrice: null, signedChangeRate: null, acc_trade_price_24h: null };
-                }
-    
-                if (
-                    updatedData[ticker].upbitPrice !== price ||
-                    updatedData[ticker].signedChangeRate !== signedChangeRate ||
-                    updatedData[ticker].acc_trade_price_24h !== acc_trade_price_24h
-                ) {
-                    updatedData[ticker].upbitPrice = price;
-                    updatedData[ticker].signedChangeRate = signedChangeRate;
-                    updatedData[ticker].acc_trade_price_24h = acc_trade_price_24h;
-                    return updatedData;
-                }
-                return prevData;
-            });
-        });
-
-        socket.on('bybit', (message) => {
-            const { ticker, price } = message;
-            setCoinData((prevData) => {
-                const updatedData = { ...prevData };
-    
-                if (!updatedData[ticker]) {
-                    updatedData[ticker] = { upbitPrice: null, bybitPrice: null, signedChangeRate: null, acc_trade_price_24h: null };
-                }
-    
-                if (updatedData[ticker].bybitPrice !== price) {
-                    updatedData[ticker].bybitPrice = price;
-                    return updatedData;
-                }
-                return prevData;
-            });
-        });
-
-        socket.on('exchangeRateUpdate', (message) => {
-            setExchangeRate((prevRate) => {
-                return prevRate !== message.exchangeRate ? message.exchangeRate : prevRate;
-            });
-        });
-
-        socket.on('disconnect', () => {
-            console.warn('[WebSocket] Disconnected. Reconnecting...');
-            socket.connect(); // 단순 재연결
-        });
-
+        const socket = createWebsocket(process.env.REACT_APP_BACKEND_URL, { setCoinData, setExchangeRate });
+        
         return () => {
             socket.disconnect();
         };
     }, []);
 
+    // localStorage에 저장된 북마크 코인들 상태에 저장
+    useEffect(() => {
+        const savedBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || {};
+        setBookmarks(savedBookmarks);
+    }, []);
+
+    // 정렬 기준 변경 시 localStorage에 저장
+    useEffect(() => {
+        localStorage.setItem('sortConfig', JSON.stringify(sortConfig));
+    }, [sortConfig]);
     
-    const sortedData = useMemo(() => {
-        return Object.keys(coinData)
-            .map(ticker => ({
-                ticker,
-                ...coinData[ticker],
-                isBookmarked: bookmarks[ticker] || false,
-            }))
-            .filter(coin => coin.ticker.toLowerCase().includes(searchTerm.toLowerCase()))
-            .sort((a, b) => {
-                if (a.isBookmarked && !b.isBookmarked) return -1;
-                if (!a.isBookmarked && b.isBookmarked) return 1;
-
-                const { key, direction } = sortConfig;
-
-                if (key === 'premiumValue') {
-                    const aPremium = updatePremium(a.ticker, a, exchangeRate).premiumRate;
-                    const bPremium = updatePremium(b.ticker, b, exchangeRate).premiumRate;
-                    return direction === 'asc' ? aPremium - bPremium : bPremium - aPremium;
-                }
-
-                if (a[key] === null) return 1;
-                if (b[key] === null) return -1;
-                
-                return direction === 'asc' ? (a[key] > b[key] ? 1 : -1) : (a[key] < b[key] ? 1 : -1);
-            });
+    // 검색, 북마크 정보 추가, 정렬을 수행한 최종 코인 데이터를 생성
+    const processedCoinData = useMemo(() => {
+        const filteredData = filterCoins(coinData, searchTerm);
+        const dataWithBookmarks = addBookmarkInfo(filteredData, bookmarks);
+        return sortCoins(dataWithBookmarks, sortConfig, exchangeRate);
     }, [coinData, bookmarks, sortConfig, searchTerm, exchangeRate]);
 
+    // 특정 코인의 북마크 상태를 토글하고 로컬 스토리지에 저장
     const handleBookmarkToggle = (ticker) => {
         setBookmarks((prevBookmarks) => {
             const updatedBookmarks = { ...prevBookmarks, [ticker]: !prevBookmarks[ticker] };
@@ -152,23 +56,12 @@ function App() {
         });
     };
 
-    useEffect(() => {
-        const savedBookmarks = JSON.parse(localStorage.getItem('bookmarks')) || {};
-        setBookmarks(savedBookmarks);
-    }, []);
-
-    useEffect(() => {
-        setSortedCoinData(sortedData);
-    }, [sortedData]);
-
-    useEffect(() => {
-        localStorage.setItem('sortConfig', JSON.stringify(sortConfig));
-    }, [sortConfig]);
-
+    // 사용자가 특정 코인을 클릭했을 때, 선택된 코인 상태를 업데이트
     const handleCoinClick = (ticker) => {
         setSelectedCoin(ticker);
     };
 
+    // 정렬 기준을 변경하고, 토글에 따라 정렬 순서(오름차순:asc, 내림차순:desc)를 변경
     const handleSort = (key) => {
         setSortConfig((prevConfig) => ({
             key,
@@ -176,6 +69,7 @@ function App() {
         }));
     };
 
+    // 검색어 입력시 검색 상태를 업데이트
     const handleSearch = (term) => {
         setSearchTerm(term);
     };
@@ -195,7 +89,7 @@ function App() {
                             onSearch={handleSearch}
                         />
                         <CoinTable 
-                            coinData={sortedCoinData} 
+                            coinData={processedCoinData} 
                             exchangeRate={exchangeRate} 
                             onCoinClick={handleCoinClick} 
                             onSort={handleSort} 
