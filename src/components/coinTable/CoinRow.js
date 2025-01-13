@@ -35,7 +35,7 @@ const CoinRow = ({ ticker, data, exchangeRate, onClick, onBookmarkToggle }) => {
       setTimeout(() => setUpbitAnimation(''), 1000); // 1초 후 초기화
     }
   }, [data.upbitPrice, previousUpbitPrice]);
-
+  
   return (
     <tr id={`coin-${ticker}`} onClick={onClick} style={{ cursor: 'pointer' }}>
       <td className='simbolInfoTd'>
@@ -48,7 +48,7 @@ const CoinRow = ({ ticker, data, exchangeRate, onClick, onBookmarkToggle }) => {
           {/* <img className="coinLogo" src={`https://static.upbit.com/logos/${ticker}.png`} alt={ticker} /> */}
           <img
             className="coinLogo"
-            src={`${process.env.REACT_APP_BACKEND_URL}/optimized-logo/${ticker}`}
+            src={`${process.env.REACT_APP_BACKEND_URL}optimized-logo/${ticker}`}
             alt={ticker}
           />
 
