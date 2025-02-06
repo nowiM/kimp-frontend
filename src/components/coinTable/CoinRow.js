@@ -46,9 +46,7 @@ const CoinRow = ({ ticker, data, exchangeRate, onClick, onBookmarkToggle }) => {
         }}>
         </div>
         <div className="left">
-          {/* <img className="coinLogo" src={`https://static.upbit.com/logos/${ticker}.png`} alt={ticker} /> */}
           <img className="coinLogo" src={`${process.env.REACT_APP_BACKEND_URL}logo/${ticker}`} alt={ticker} />
-
         </div>
         <div className="right">
           {ticker}
