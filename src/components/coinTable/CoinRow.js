@@ -36,6 +36,7 @@ const CoinRow = ({ ticker, data, exchangeRate, onClick, onBookmarkToggle }) => {
     }
   }, [data.upbitPrice, previousUpbitPrice]);
   
+  // 배포 서버 테스트
   return (
     <tr id={`coin-${ticker}`} onClick={onClick} style={{ cursor: 'pointer' }}>
       <td className='simbolInfoTd'>
