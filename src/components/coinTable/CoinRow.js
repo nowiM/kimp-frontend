@@ -36,6 +36,7 @@ const CoinRow = ({ ticker, data, exchangeRate, onClick, onBookmarkToggle }) => {
     }
   }, [data.upbitPrice, previousUpbitPrice]);
   
+  // 배포 서버 테스트
   return (
     <tr id={`coin-${ticker}`} onClick={onClick} style={{ cursor: 'pointer' }}>
       <td className='simbolInfoTd'>
@@ -45,13 +46,7 @@ const CoinRow = ({ ticker, data, exchangeRate, onClick, onBookmarkToggle }) => {
         }}>
         </div>
         <div className="left">
-          <img className="coinLogo" src={`https://static.upbit.com/logos/${ticker}.png`} alt={ticker} />
-          {/* <img
-            className="coinLogo"
-            src={`${process.env.REACT_APP_BACKEND_URL}optimized-logo/${ticker}`}
-            alt={ticker}
-          /> */}
-
+          <img className="coinLogo" src={`${process.env.REACT_APP_BACKEND_URL}logo/${ticker}`} alt={ticker} />
         </div>
         <div className="right">
           {ticker}
